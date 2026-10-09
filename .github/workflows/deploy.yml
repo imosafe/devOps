@@ -1,0 +1,42 @@
+name: Deploy to Github actions
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+on: 
+  push:
+    branches: [master]
+  
+jobs:
+  deployment:
+    environment: 
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js 
+        uses: actions/setup-node@v4
+        with: 
+          node-version: 24
+      - name: Setup pages
+        uses: actions/configure-pages@v5
+      - name: Install Node.js dependencies 
+        run:
+          npm ci
+      - name: Build angular app
+        run: npm run build -- --base-href /${{ github.event.repository.name }}/
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist/pipelines/browser'
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

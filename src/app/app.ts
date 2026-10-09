@@ -1,12 +1,12 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component} from '@angular/core';
 
 @Component({
-  imports: [RouterOutlet],
   selector: 'app-root',
-  styleUrl: './app.css',
-  templateUrl: './app.html',
+  imports: [],
+  template: ` <h1>Hello World</h1> `,
+  styleUrls: ['./app.css'],
 })
 export class App {
-  protected readonly title = signal('pipelines');
+  title = 'Home';
 }
+
